@@ -4,15 +4,15 @@ function PlayGameState()
     this.background = new PGBackGround();
     
     //컨트롤러
-    this.imgCtrlLeft = resourcePreLoader.GetImage("/img/game_ctrl_left.png");
-    this.imgCtrlRight = resourcePreLoader.GetImage("/img/game_ctrl_right.png");
+    this.imgCtrlLeft = resourcePreLoader.GetImage("img/game_ctrl_left.png");
+    this.imgCtrlRight = resourcePreLoader.GetImage("img/game_ctrl_right.png");
     // this.imgCtrlDash = resourcePreLoader.GetImage("/.c9/img/game_ctrl_dash.png");
     
     //타이머
     this.timer = new Timer();
     
     //플레이어
-    this.sprPlayer = new SpriteAnimation(resourcePreLoader.GetImage("/img/game_player.png"), 125, 167, 4, 4);
+    this.sprPlayer = new SpriteAnimation(resourcePreLoader.GetImage("img/game_player.png"), 125, 167, 4, 4);
     this.x = 150;
     this.y = 200;
     
@@ -23,9 +23,9 @@ function PlayGameState()
     this.dashPower = 0;
 
     //로그
-    this.imgShortlog1 = resourcePreLoader.GetImage("/img/game_shortlog.png");
-    this.imgShortlog2 = resourcePreLoader.GetImage("/img/game_shortlog.png");
-    this.imgShortlog3 = resourcePreLoader.GetImage("/img/game_shortlog.png");
+    this.imgShortlog1 = resourcePreLoader.GetImage("img/game_shortlog.png");
+    this.imgShortlog2 = resourcePreLoader.GetImage("img/game_shortlog.png");
+    this.imgShortlog3 = resourcePreLoader.GetImage("img/game_shortlog.png");
     
     //로그 이동
     this.posShortlog1 = 0+200;

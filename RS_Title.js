@@ -1,21 +1,21 @@
 function TitleState() 
 {
-    this.imgBackground = resourcePreLoader.GetImage("/img/title_background.png");
+    this.imgBackground = resourcePreLoader.GetImage("img/title_background.png");
     
-    this.imgButtonStartOff = resourcePreLoader.GetImage("/img/title_start_off.png");
-    this.imgButtonStartOn  = resourcePreLoader.GetImage("/img/title_start_on.png");
+    this.imgButtonStartOff = resourcePreLoader.GetImage("img/title_start_off.png");
+    this.imgButtonStartOn  = resourcePreLoader.GetImage("img/title_start_on.png");
     
-    this.imgButtonRankingOff = resourcePreLoader.GetImage("/img/title_ranking_off.png");
-    this.imgButtonRankingOn  = resourcePreLoader.GetImage("/img/title_ranking_on.png");
+    this.imgButtonRankingOff = resourcePreLoader.GetImage("img/title_ranking_off.png");
+    this.imgButtonRankingOn  = resourcePreLoader.GetImage("img/title_ranking_on.png");
     
-    soundSystem.PlayBackgroundMusic("/background.mp3");
+    soundSystem.PlayBackgroundMusic("background.mp3");
     
     return this; 
 }
 
 TitleState.prototype.Init = function()
 {
-    soundSystem.PlayBackgroundMusic("/background.mp3");
+    soundSystem.PlayBackgroundMusic("background.mp3");
 };
 
 TitleState.prototype.Render = function()
