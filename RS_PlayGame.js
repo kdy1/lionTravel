@@ -87,13 +87,16 @@ PlayGameState.prototype.Render = function()
 
     //로그 그리기
     Context.font = "50px Arial";
-    // Context.fillText("1번", this.posShortlog1, this.y_log_position_Arr[0]-50);
+    if(debugSystem.debugMode)
+        Context.fillText(`1번 ${this.posShortlog1}`, this.posShortlog1, this.y_log_position_Arr[0]-50);
     Context.drawImage(this.imgShortlog1, this.posShortlog1, this.y_log_position_Arr[0], 170, 32);
     
-    // Context.fillText("2번", this.posShortlog2, this.y_log_position_Arr[1]-50);
+    if(debugSystem.debugMode)
+        Context.fillText(`2번 ${this.posShortlog2}`, this.posShortlog2, this.y_log_position_Arr[1]-50);
     Context.drawImage(this.imgShortlog2, this.posShortlog2, this.y_log_position_Arr[1], 170, 32);
     
-    // Context.fillText("3번", this.posShortlog3, this.y_log_position_Arr[2]-50);
+    if(debugSystem.debugMode)
+        Context.fillText(`3번 ${this.posShortlog3}`, this.posShortlog3, this.y_log_position_Arr[2]-50);
     Context.drawImage(this.imgShortlog3, this.posShortlog3, this.y_log_position_Arr[2], 170, 32);
     
     //플레이어 그리기
@@ -118,7 +121,7 @@ PlayGameState.prototype.Update = function()
     this.posShortlog2 -= this.speedShortlog2;
     this.posShortlog3 -= this.speedShortlog3;
     
-    var logXPosBoundary = -150;
+    var logXPosBoundary = -170;
 
     if(this.posShortlog1 < logXPosBoundary)
     {
@@ -161,10 +164,32 @@ PlayGameState.prototype.Update = function()
         this.afterjump_Arr.push(this.y_log_position_Arr[2]);
         // console.log('3번: ', this.afterjump_Arr.length - 1);
     }
+
+    
+    // 화면 가장 왼쪽에 있는 로그 테스트
+    // var logToTest = this.afterjump_Arr[this.i];
+    var logToTest = this.afterjump_Arr[this.afterjump_Arr.length - 2];
+    
+    // 밟을 수 있는 통나무
+    // TODO:
+    var stepableLogExists = true;
+    
+
+    
+    
+
+    if (this.isJumpPowerNotLocked && this.jumpPower <= 20) {
+        // TODO: 라이언 이미지 Y 크기
+        var lionImageYSize = 0; 
+        // y축 방향으로 화면에서 나가지 않게 설정
+        if (0 < (this.y + this.jumpPower) && (this.y + this.jumpPower) < 600 - lionImageYSize) {
+            this.y += this.jumpPower;
+        }
+        this.jumpPower += 1;
+    }
     
     //키보드로 점프
-    if(this.isJumpPowerNotLocked && this.jumpPower > 20)
-    {
+    if (this.isJumpPowerNotLocked && this.jumpPower > 0) {
         if(inputSystem.isKeyDown(37))
         {
             this.jumpPower = -17;
@@ -180,42 +205,32 @@ PlayGameState.prototype.Update = function()
             this.jumpPower = -15;
         }
     }
-    else
+    
+    
+    // 밟을 수 있는 통나무가 존재하고, 아래로 떨어지고 있고, 통나무보다 약간 위에 있으면 착지
+    if( stepableLogExists && this.jumpPower > 0 && (logToTest-200 < this.y && this.y < logToTest-150))
     {
-        if (this.isJumpPowerNotLocked) {
-            this.y += this.jumpPower;
-            this.jumpPower += 1;
-        }
+        this.y = logToTest - 150;
+        // console.info(`Setting player's y as ${this.y} using ${logToTest}`);
         
-        
-
-        // 화면 가장 왼쪽에 있는 로그 테스트
-        // var logToTest = this.afterjump_Arr[this.i];
-        var logToTest = this.afterjump_Arr[this.afterjump_Arr.length - 2];
-        if( this.jumpPower > 20 && this.y > logToTest-150)
-        {
-            this.y = logToTest - 150;
-            // console.info(`Setting player's y as ${this.y} using ${this.i}`);
-            
-            this.jumpPower = 0;
-            this.isJumpPowerNotLocked = false;
-            var self = this;
-            if(!!this.timerForResettingJumpPowerLock) {
-                clearTimeout(this.timerForResettingJumpPowerLock);
-            }
-
-            // TODO: 현재는 1초 후 jump power lock이 풀리는데,
-            // (${오른쪽 끝} - ${착지한 위치}) / ${로그 속도}로 바꿔줘야 함
-            //
-            // 현재는 착지 위치에 따라 이상하게 떨어지는 경우가 있음.
-            this.timerForResettingJumpPowerLock = setTimeout(function(){
-                self.isJumpPowerNotLocked = true;
-            }, 1000);
-            
-            this.i++;
+        this.jumpPower = 0;
+        this.isJumpPowerNotLocked = false;
+        var self = this;
+        if(!!this.timerForResettingJumpPowerLock) {
+            clearTimeout(this.timerForResettingJumpPowerLock);
         }
-        this.Invalid();
+
+        // TODO: 현재는 0.3초 후 jump power lock이 풀리는데,
+        // (${오른쪽 끝} - ${착지한 위치}) / ${로그 속도}로 바꿔줘야 함
+        //
+        // 현재는 착지 위치에 따라 이상하게 떨어지는 경우가 있음.
+        this.timerForResettingJumpPowerLock = setTimeout(function(){
+            self.isJumpPowerNotLocked = true;
+        }, 300);
+        
+        this.i++;
     }
+    this.Invalid();
 };
 
 PlayGameState.prototype.onMouseDown = function()
